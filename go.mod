@@ -1,4 +1,4 @@
-module gihub.com/tnarik/hugo-homebrewery-theme_props
+module github.com/tnarik/hugo-homebrewery-theme_props
 
 go 1.21.1
 

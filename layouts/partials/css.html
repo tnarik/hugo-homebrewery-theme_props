@@ -1,0 +1,6 @@
+{{ if .Params.style }}
+{{ $style := printf "hb_%s.css" .Params.style }}
+{{ with resources.Get $style | resources.Minify | resources.Fingerprint }}
+<link rel="stylesheet" href="{{ .Permalink }}">
+{{ end }}
+{{ end }}

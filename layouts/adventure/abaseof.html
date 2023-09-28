@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="{{ site.Language }}" dir="{{ .Language.LanguageDirection | default "auto" }}">
+
+<head>
+
+    <link href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700" rel="stylesheet" type="text/css" />
+    {{ with resources.Get "bundle.css" | resources.Minify | resources.Fingerprint }}
+    <link rel="stylesheet" href="{{ .Permalink }}">
+    {{ end }}
+    {{/*  <link href="/bundle.css" rel="stylesheet">  */}}
+</head>
+
+<body class="
+{{- if (or (ne .Kind `page` ) (eq .Layout `archives`) (eq .Layout `search`)) -}}
+{{- print "list" -}}
+{{- end -}}
+{{- if eq site.Params.defaultTheme `dark` -}}
+{{- print " dark" }}
+{{- end -}}
+" id="top">
+     {{- partialCached "header.html" . .Page -}}
+    <main class="main">
+        <div class="frame-content">
+        <div class="brewRenderer">
+            {{/*  <link href="/bundle.css" rel="stylesheet">  */}}
+            {{/*  <link href="/themes/V3/Blank/style.css" rel="stylesheet">  */}}
+            {{/*  <link href="/themes/V3/5ePHB/style.css" rel="stylesheet">  */}}
+                <div class="pages">
+                <div class="page" id="p1" key="0" >
+            {{- block "main" . }}{{ end }}
+                </div>
+                </div>
+        </div>
+        </div>
+    </main>
+    {{ partialCached "footer.html" . .Layout .Kind (.Param "hideFooter") (.Param "ShowCodeCopyButtons") -}} 
+</body>
+
+</html>
+

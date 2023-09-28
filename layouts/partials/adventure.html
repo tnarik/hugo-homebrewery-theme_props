@@ -1,0 +1,38 @@
+{{- if .RawContent -}}
+  <div class="post-content">
+    {{/*  {{- if not (.Param "disableAnchoredHeadings") -}}
+    {{- partial "anchored_headings.html" .RawContent -}}
+    {{- else -}}{{ .RawContent -}}{{- end -}}  */}}
+  </div>
+
+  {{ with resources.Get "hb_markdown.js" | resources.Minify | resources.Fingerprint }}
+  <script language="javascript" type="text/javascript" src="{{ .Permalink }}"></script>
+  {{ end }}
+  <script>
+
+    renderPage = function(pageText, index){
+      //let cleanPageText = this.sanitizeScriptTags(pageText);
+      pageText += `\n\n&nbsp;\n\\column\n&nbsp;`; //Artificial column break at page end to emulate column-fill:auto (until `wide` is used, when column-fill:balance will reappear)
+        return (
+        "<div class='page' id={`p${index + 1}`} key={index} > \
+            <div class='columnWrapper'>"+hb_markdown.render(pageText)+"</div> \
+          </div>"
+        );
+    };
+  
+    renderPages = function(pages){
+      lastRender = pages.map((page, index)=>{
+        //console.log(renderPage(page, index));
+        return renderPage(page, index);
+      });
+      return lastRender.join('');
+    },
+
+    //document.getElementsByClassName('post-content')[0].innerHTML = hb_markdown.render({{ .RawContent }});
+    pages = {{ .RawContent }}.split(/^\\page$/gm);
+
+    document.getElementsByClassName('post-content')[0].outerHTML = renderPages(pages);
+    console.log(renderPages(pages));
+
+  </script>
+  {{- end -}}

@@ -1,0 +1,33 @@
+{{- define "main" }}
+
+<div class="frame-content">
+  <div class="brewRenderer">
+    <link href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" rel="stylesheet" />
+    {{ with resources.Get "css/paging.css" | resources.Minify | resources.Fingerprint }}
+    <link rel="stylesheet" href="{{ .Permalink }}">
+    {{ end }}
+
+    {{- partial "css.html" . }}
+
+
+    <div class="pages">
+
+      {{- $isHidden := .Params.cover.hidden | default site.Params.cover.hiddenInSingle | default
+      site.Params.cover.hidden }}
+      {{- partial "cover.html" (dict "cxt" . "IsHome" false "isHidden" $isHidden) }}
+      {{- if (.Param "ShowToc") }}
+      {{- partial "toc.html" . }}
+      {{- end }}
+
+      {{- partial "adventure.html" . }}
+
+      {{ if .Params.series }}
+      <div class="page" id="px" key="0">
+        {{- partial "series.html" . }}
+      </div>
+      {{ end }}
+
+    </div>
+  </div>
+</div>
+{{- end }}

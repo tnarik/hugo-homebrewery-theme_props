@@ -5,7 +5,6 @@
     {{- else -}}{{ .RawContent -}}{{- end -}}  */}}
   </div>
 
-
   <script type="module">
     {{ with resources.Get "hb_markdown.js" | resources.Minify | resources.Fingerprint }}
     import Markdown from '{{ .Permalink }}';
@@ -33,7 +32,5 @@
     let pages = {{ .RawContent }}.split(/^\\page$/gm);
 
     document.getElementsByClassName('post-content')[0].outerHTML = renderPages(pages);
-    console.log(renderPages(pages));
-
   </script>
 {{- end -}}

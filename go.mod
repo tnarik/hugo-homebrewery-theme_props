@@ -2,4 +2,4 @@ module github.com/tnarik/hugo-homebrewery-theme_props
 
 go 1.23.1
 
-require github.com/tnarik/hugo-homebrewery v0.0.0-20230921101457-7218f82b4d1e // indirect
+require github.com/tnarik/hugo-homebrewery v0.0.0-20250426154603-8604c5749068 // indirect

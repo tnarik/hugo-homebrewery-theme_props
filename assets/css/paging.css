@@ -1,3 +1,11 @@
+:root {
+  --HB_Color_Foreground: #1E1E1E;
+}
+
+.dark{
+  --HB_Color_Foreground: #1E1E1E;
+}
+
 .pages {
     margin: 30px 0px;
 }
@@ -13,5 +21,14 @@
     margin-right  : 30px;
     margin-bottom: 30px;
     margin-left: auto;
-    box-shadow: 1px 4px 14px #000
+    box-shadow: 1px 4px 14px #000;
+    color: var(--HB_Color_Foreground);
 }
+
+
+/* .page #example + table td {
+	border:1px dashed #00000030;
+}
+.page {
+	padding-bottom : 1.1cm;
+}  */

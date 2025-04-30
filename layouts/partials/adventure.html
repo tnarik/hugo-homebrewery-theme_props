@@ -10,27 +10,47 @@
     import Markdown from '{{ .Permalink }}';
     {{ end }}
 
+    let createNewPage = function(pageText, index) {
+      const page = Object.assign(document.createElement('div'), {
+        className: 'page',
+        id: `p${index + 1}`,
+        key: index,
+      });
+      const columnWrapper = Object.assign(document.createElement('div'), {
+        className: 'columnWrapper',
+        innerHTML: pageText,
+      });
+      page.appendChild(columnWrapper);
+      return page;
+    }
+
     let renderPage = function(pageText, index){
-      //let cleanPageText = this.sanitizeScriptTags(pageText);
-      pageText += `\n\n&nbsp;\n\\column\n&nbsp;`; //Artificial column break at page end to emulate column-fill:auto (until `wide` is used, when column-fill:balance will reappear)
-        return (
-        "<div class='page' id={`p${index + 1}`} key={index} > \
-            <div class='columnWrapper'>"+Markdown.render(pageText)+"</div> \
-          </div>"
-        );
+        return createNewPage(Markdown.render(pageText), index);
     };
   
-    let renderPages = function(pages){
-      let lastRender = pages.map((page, index)=>{
-        //console.log(renderPage(page, index));
-        return renderPage(page, index);
-      });
-      return lastRender.join('');
+    let addPage = function(pageContainer, pageText, index){
+      let page = createNewPage('', index)
+      pageContainer.appendChild(page);
+      page.innerHTML = Markdown.render(pageText);
     };
 
-    //document.getElementsByClassName('post-content')[0].innerHTML = Markdown.render({{ .RawContent }});
+    let renderPages = function(pages){
+      let renderedPages = pages.map(
+        (page, index) => renderPage(page, index)
+      );
+      return renderedPages;
+    };
+
+    let addPages = function(pageContainer, pages){
+      let renderedPages = pages.map(
+        (page, index) => addPage(pageContainer, page, index)
+      );
+    };
+
     let pages = {{ .RawContent }}.split(/^\\page$/gm);
 
-    document.getElementsByClassName('post-content')[0].outerHTML = renderPages(pages);
+    let pageContainer = document.getElementsByClassName('post-content')[0].parentElement;
+    document.getElementsByClassName('post-content')[0].remove();
+    addPages(pageContainer, pages);
   </script>
 {{- end -}}

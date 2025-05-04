@@ -1,14 +1,19 @@
 {{- define "main" }}
 
+<div class="pages">
+  <div class="page pageNote">
+    {{- partial "adventures/series.html" . }}
+  </div>
+</div>
+
 <div class="frame-content">
   <div class="brewRenderer">
     <link href="https://use.fontawesome.com/releases/v5.15.1/css/all.css" rel="stylesheet" />
+    {{- partial "adventures/css.html" . }}
     {{ with resources.Get "css/paging.css" | resources.Minify | resources.Fingerprint }}
     <link rel="stylesheet" href="{{ .Permalink }}">
     {{ end }}
-
-    {{- partial "css.html" . }}
-
+    
     <div class="pages">
 
       {{- $isHidden := .Params.cover.hidden | default site.Params.cover.hiddenInSingle | default
@@ -18,14 +23,7 @@
       {{- partial "toc.html" . }}
       {{- end }}
 
-      {{- partial "adventure.html" . }}
-
-      {{ if .Params.series }}
-      <div class="page" id="px" key="0">
-        {{- partial "series.html" . }}
-      </div>
-      {{ end }}
-
+      {{- partial "adventures/adventure.html" . }}
     </div>
   </div>
 </div>

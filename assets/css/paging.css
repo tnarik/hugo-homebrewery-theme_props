@@ -1,6 +1,6 @@
 
 .pages {
-    margin: 30px 0px;
+    margin: 0px 0px;
     --HB_Color_Foreground: #1E1E1E;
 }
 
@@ -21,6 +21,24 @@
     color: var(--HB_Color_Foreground);
 }
 
+.page a {
+  text-decoration: revert;
+}
+
+/* Class for small page-like notes */
+.pageNote {
+  height: unset;
+  contain: unset;
+  padding-top: 0.5cm;
+  padding-bottom: 0.3cm;
+  column-count: 1;
+}
+.pageNote::after {
+  height: 0px;
+  background-image: unset;
+}
+
+/* avoid width limitation when using pages */
 .main {
   max-width: unset;
 }

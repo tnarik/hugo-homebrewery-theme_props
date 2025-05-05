@@ -29,8 +29,9 @@
     };
   
     let addPage = function(pageContainer, pageText, index){
-      let page = createNewPage('', index)
+      let page = createNewPage('', index+1)
       pageContainer.appendChild(page);
+      pageText = `${pageText} \{\{pageNumber ${index+1} }} \{\{footnote {{ .Title }} }}`;
       page.innerHTML = Markdown.render(pageText);
     };
 

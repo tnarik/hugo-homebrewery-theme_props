@@ -1,28 +1,39 @@
 {{ if .Params.series }}
-<div class="series-info">
-  {{ with index (.GetTerms "series") 0 }}
-    <h3>this chronicle is part of the <a href="{{ .Permalink }}">{{ .LinkTitle }}</a> series</h3>  
-  {{ end }}
-
-
-  {{ $series := index .Params.series 0 }}
-  {{ with $series }}
-    {{ $inSection := where site.RegularPages.ByDate "Section" $.Section }}
-    {{ $related := where $inSection "Params.series" "intersect" (slice .) }}
-    {{ $total := len $related }}
-
-    <ul class="series-list">
-      {{ range $index, $entry := $related }}
-        {{ $position := add $index 1 }}
-        <li>
-          {{ if eq $entry.RelPermalink $.RelPermalink }}
-            <strong>{{ $entry.Title }} ({{ $position }} of {{ $total }})</strong>
-          {{ else }}
-            <a href="{{ $entry.RelPermalink }}">{{ $entry.Title }} ({{ $position }} of {{ $total }})</a>
-          {{ end }}
-        </li>
+<div class="pages">
+  <div class="page pageNote">
+    <div class="series-info">
+      {{ with index (.GetTerms "series") 0 }}
+        <h3>this chronicle is part of the <a href="{{ .Permalink }}">{{ .LinkTitle }}</a> series</h3>
       {{ end }}
-    </ul>
-  {{ end }}
+
+
+      {{ $series := index .Params.series 0 }}
+      {{ with $series }}
+        {{ $inSection := where site.RegularPages.ByDate "Section" $.Section }}
+        {{ $related := where $inSection "Params.series" "intersect" (slice .) }}
+        {{ $total := len $related }}
+
+        <ul class="series-list">
+          {{ range $index, $entry := $related }}
+            {{ $position := add $index 1 }}
+            <li>
+              {{ if eq $entry.RelPermalink $.RelPermalink }}
+                <strong>{{ $entry.Title }} ({{ $position }} of {{ $total }})
+                  {{ if $entry.Draft}}
+                    <span class="inline-block fa fa-pencil-alt"></span>
+                  {{ end }}
+                </strong>
+              {{ else }}
+                <a href="{{ $entry.RelPermalink }}">{{ $entry.Title }} ({{ $position }} of {{ $total }})</a>
+                {{ if $entry.Draft}}
+                  <span class="inline-block fa fa-pencil-alt"></span>
+                {{ end }}
+              {{ end }}
+            </li>
+          {{ end }}
+        </ul>
+      {{ end }}
+    </div>
+  </div>
 </div>
 {{ end }}

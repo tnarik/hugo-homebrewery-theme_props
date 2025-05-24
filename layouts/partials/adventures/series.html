@@ -6,7 +6,6 @@
         <h3>this chronicle is part of the <a href="{{ .Permalink }}">{{ .LinkTitle }}</a> series</h3>
       {{ end }}
 
-
       {{ $series := index .Params.series 0 }}
       {{ with $series }}
         {{ $inSection := where site.RegularPages.ByDate "Section" $.Section }}
@@ -32,6 +31,21 @@
             </li>
           {{ end }}
         </ul>
+      {{ end }}
+
+      {{ with .Params.series }}
+        {{ if gt (len .) 1 }}
+        <h4>also of
+        {{ $seriesLinks := slice }}
+        {{ range after 1 . }}
+          {{ with $.Site.GetPage (printf "/series/%s" (. | urlize)) }}
+          {{ $linkHTML := printf "<a href=\"%s\">%s</a>" .Permalink .LinkTitle | safeHTML }}
+          {{ $seriesLinks = $seriesLinks | append ($linkHTML | safeHTML) }}
+          {{ end }}
+        {{ end }}
+        {{ delimit $seriesLinks ", " " and " | safeHTML }}
+        </h4>
+        {{ end }}
       {{ end }}
     </div>
   </div>

@@ -48,7 +48,10 @@
       );
     };
 
-    let pages = {{ .RawContent }}.split(/^\\page$/gm);
+
+    {{ $withShortcodes := $.Page.RenderShortcodes }}
+
+    let pages = {{ $withShortcodes }}.split(/^\\page$/gm);
 
     let pageContainer = document.getElementsByClassName('post-content')[0].parentElement;
     document.getElementsByClassName('post-content')[0].remove();

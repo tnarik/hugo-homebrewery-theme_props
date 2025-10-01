@@ -25,6 +25,10 @@
   text-decoration: revert;
 }
 
+.page table {
+  display: inline-table;
+}
+
 /* Class for small page-like notes */
 .pageNote {
   height: unset;

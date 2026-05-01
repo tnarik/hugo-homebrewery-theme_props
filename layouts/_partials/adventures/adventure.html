@@ -6,9 +6,9 @@
   </div>
 
   <script type="module">
-    {{ with resources.Get "hb_markdown.js" | resources.Minify | resources.Fingerprint }}
+    {{- with resources.Get "hb_markdown.js" | resources.Minify | resources.Fingerprint -}}
     import Markdown from '{{ .Permalink }}';
-    {{ end }}
+    {{- end -}}
 
     let createNewPage = function(pageText, index) {
       const page = Object.assign(document.createElement('div'), {
@@ -23,39 +23,29 @@
       page.appendChild(columnWrapper);
       return page;
     }
-
-    let renderPage = function(pageText, index){
-        console.log('RUNNING Markdow.render on renderPage')
-        return createNewPage(Markdown.render(pageText), index);
-    };
   
     let addPage = function(pageContainer, pageText, index){
       let page = createNewPage('', index+1)
       pageContainer.appendChild(page);
       pageText = `${pageText} \{\{pageNumber ${index+1} }} \{\{footnote {{ .Title }} }}`;
       page.innerHTML = Markdown.render(pageText);
-
-      // TODO: added from LLM, double check
-      runScriptsFrom(page);
     };
-
-    // let renderPages = function(pages){
-    //   let renderedPages = pages.map(
-    //     (page, index) => renderPage(page, index)
-    //   );
-    //   return renderedPages;
-    // };
 
     let addPages = function(pageContainer, pages){
       let renderedPages = pages.map(
         (page, index) => addPage(pageContainer, page, index)
       );
+      
+      // TODO: added from LLM, double check
+      runScriptsFrom(pageContainer);
     };
 
       // TODO: from LLM. lets revisit
     let runScriptsFrom = function (container) {
         console.log('RUNNING runScriptsFrom');
         const scripts = container.querySelectorAll("script");
+        console.log('RUNNING runScriptsFrom for '+scripts.length+' scripts');
+
         scripts.forEach(oldScript => {
           const newScript = document.createElement("script");
           console.log('RUNNING runScriptsFrom > creating new script so that it runs');
@@ -81,9 +71,11 @@
 
     let pages = {{ $withShortcodes | jsonify | safeJS }}.split(/^\\page$/gm);
 
-    let pageContainer = document.getElementsByClassName('post-content')[0].parentElement;
-    document.getElementsByClassName('post-content')[0].remove();
-    console.log('RUNNING about to addPages')
-    addPages(pageContainer, pages);
+    if ( document.getElementsByClassName('post-content')[0] != undefined) {
+      let pageContainer = document.getElementsByClassName('post-content')[0].parentElement;
+      document.getElementsByClassName('post-content')[0].remove();
+      console.log('RUNNING about to addPages')
+      addPages(pageContainer, pages);
+    }
   </script>
 {{- end -}}

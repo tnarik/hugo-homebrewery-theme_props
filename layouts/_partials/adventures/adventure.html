@@ -1,8 +1,9 @@
 {{- if .RawContent -}}
   <div class="post-content">
-    {{/*  {{- if not (.Param "disableAnchoredHeadings") -}}
-    {{- partial "anchored_headings.html" .RawContent -}}
-    {{- else -}}{{ .RawContent -}}{{- end -}}  */}}
+  {{ $withShortcodes := $.Page.RenderShortcodes }}
+  <template id="unrenderedPages">
+    {{- $withShortcodes | safeHTML -}}
+  </template>
   </div>
 
   <script type="module">
@@ -13,14 +14,9 @@
     let createNewPage = function(pageText, index) {
       const page = Object.assign(document.createElement('div'), {
         className: 'page',
-        id: `p${index + 1}`,
+        id: `p${index}`,
         key: index,
       });
-      const columnWrapper = Object.assign(document.createElement('div'), {
-        className: 'columnWrapper',
-        innerHTML: pageText,
-      });
-      page.appendChild(columnWrapper);
       return page;
     }
   
@@ -28,28 +24,30 @@
       let page = createNewPage('', index+1)
       pageContainer.appendChild(page);
       pageText = `${pageText} \{\{pageNumber ${index+1} }} \{\{footnote {{ .Title }} }}`;
-      page.innerHTML = Markdown.render(pageText);
+
+      // Create a ghost DOM structure
+      let range = document.createRange();
+      let fragment = range.createContextualFragment(Markdown.render(pageText));
+      page.appendChild(fragment);
     };
 
-    let addPages = function(pageContainer, pages){
+    let replaceWithPages = function(placeholder, pagesContent){
+      let pageContainer = document.getElementsByClassName(placeholder)[0].parentElement;
+      let pages = pagesContent.split(/^\\page$/gm);
       let renderedPages = pages.map(
         (page, index) => addPage(pageContainer, page, index)
       );
-      
+      document.getElementsByClassName(placeholder)[0].remove();
+
       // TODO: added from LLM, double check
-      runScriptsFrom(pageContainer);
+      // runScriptsFrom(pageContainer);
     };
 
       // TODO: from LLM. lets revisit
     let runScriptsFrom = function (container) {
-        console.log('RUNNING runScriptsFrom');
         const scripts = container.querySelectorAll("script");
-        console.log('RUNNING runScriptsFrom for '+scripts.length+' scripts');
-
         scripts.forEach(oldScript => {
           const newScript = document.createElement("script");
-          console.log('RUNNING runScriptsFrom > creating new script so that it runs');
-
             // Copy attributes
             Array.from(oldScript.attributes).forEach(attr => {
                 newScript.setAttribute(attr.name, attr.value);
@@ -59,23 +57,14 @@
             if (oldScript.textContent) {
                 newScript.textContent = oldScript.textContent;
             }
-            console.log(oldScript.textContent);
-            console.log(newScript.textContent);
-
             // Replace old script with new script
             oldScript.parentNode.replaceChild(newScript, oldScript);
         });
     }
 
-    {{ $withShortcodes := $.Page.RenderShortcodes }}
-
-    let pages = {{ $withShortcodes | jsonify | safeJS }}.split(/^\\page$/gm);
-
     if ( document.getElementsByClassName('post-content')[0] != undefined) {
-      let pageContainer = document.getElementsByClassName('post-content')[0].parentElement;
-      document.getElementsByClassName('post-content')[0].remove();
-      console.log('RUNNING about to addPages')
-      addPages(pageContainer, pages);
+      const pagesContent = document.getElementById('unrenderedPages').innerHTML;
+      replaceWithPages('post-content', pagesContent);
     }
   </script>
 {{- end -}}

@@ -1,2 +1,6 @@
+github.com/naturalcrit/homebrewery v3.21.0+incompatible h1:Qn3iK0Zm8intd5t2sQeHELkZJmDtAnoVwnJhsYwAS0I=
+github.com/naturalcrit/homebrewery v3.21.0+incompatible/go.mod h1:/i4yqADFUW7e+mLkyZATW3gBsSOdxcNmOrTA1lI1/IQ=
 github.com/tnarik/hugo-homebrewery v0.0.0-20251101102657-901c0f7e95cf h1:mLD5lUIlQSMRx8que1mc4zzobGKAi06THQCivHqwdJI=
 github.com/tnarik/hugo-homebrewery v0.0.0-20251101102657-901c0f7e95cf/go.mod h1:jVKXqdBl5hd2gO+KxuQUxPaMfjkeL1cRj0Cjk/L9h0k=
+github.com/tnarik/hugo-homebrewery v0.0.0-20260428123939-4a3ad3d1cd46 h1:Kut8kEejHv/WTpuJCLmhnwZZYjs5DxwKbCo+KINRi/c=
+github.com/tnarik/hugo-homebrewery v0.0.0-20260428123939-4a3ad3d1cd46/go.mod h1:jVKXqdBl5hd2gO+KxuQUxPaMfjkeL1cRj0Cjk/L9h0k=
